@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#990011;--red-light:#fff0f0;--red-mid:#cc2233;
+  --gray:#f5f5f5;--border:#e0e0e0;--text:#1a1a1a;--muted:#666;
+  --white:#fff;--green:#1a7a4a;--green-light:#f0faf5;
+  --blue:#1a4a8a;--blue-light:#f0f4ff;
+  --font:'Segoe UI',system-ui,sans-serif;
+}
+body{font-family:var(--font);color:var(--text);background:#f8f8f8;min-height:100vh}
+
+/* ---- NAV ---- */
+.nav{background:var(--red);color:#fff;padding:0 24px;display:flex;align-items:center;gap:16px;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:15px;font-weight:700;letter-spacing:.5px}
+.nav-sub{font-size:12px;opacity:.8;margin-left:4px}
+.nav-user{margin-left:auto;font-size:13px;opacity:.9}
+.nav-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font)}
+.nav-btn:hover{background:rgba(255,255,255,.28)}
+
+/* ---- SCREENS ---- */
+.screen{display:none;min-height:calc(100vh - 56px)}
+.screen.active{display:block}
+
+/* ---- LOGIN ---- */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:24px}
+.login-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:40px;width:100%;max-width:420px;text-align:center}
+.login-logo{width:80px;height:80px;margin:0 auto 16px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700}
+.login-title{font-size:20px;font-weight:700;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.tabs{display:flex;border:1px solid var(--border);border-radius:8px;margin-bottom:24px;overflow:hidden}
+.tab{flex:1;padding:10px;font-size:13px;cursor:pointer;border:none;background:transparent;font-family:var(--font);color:var(--muted);transition:.2s}
+.tab.active{background:var(--red);color:#fff;font-weight:600}
+.field{margin-bottom:16px;text-align:left}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px;font-weight:500}
+.field input,.field select{width:100%;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:14px;font-family:var(--font);color:var(--text);background:var(--white)}
+.field input:focus,.field select:focus{outline:2px solid var(--red);border-color:transparent}
+.btn-primary{width:100%;background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-primary:hover{background:var(--red-mid)}
+.msg{font-size:13px;margin-top:12px;padding:10px;border-radius:7px;display:none}
+.msg.error{background:#fff0f0;color:#c00;border:1px solid #fcc;display:block}
+.msg.success{background:var(--green-light);color:var(--green);border:1px solid #b2dfc7;display:block}
+
+/* ---- DASHBOARD (student) ---- */
+.dash{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);padding:16px 0;flex-shrink:0}
+.sidebar-item{padding:10px 20px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px;color:var(--muted);transition:.15s;border-left:3px solid transparent}
+.sidebar-item.active,.sidebar-item:hover{color:var(--red);background:#fff5f5;border-left-color:var(--red)}
+.sidebar-item .icon{font-size:15px}
+.sidebar-prog{padding:16px 20px;margin-top:auto}
+.prog-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;background:var(--red);border-radius:3px;transition:.4s}
+.main{flex:1;overflow-y:auto;padding:24px}
+.section-title{font-size:18px;font-weight:700;margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+
+/* ---- FORM CARDS ---- */
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.form-card-title{font-size:14px;font-weight:600;margin-bottom:14px;color:var(--red);display:flex;align-items:center;gap:8px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.single{grid-template-columns:1fr}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.f-field{display:flex;flex-direction:column;gap:5px}
+.f-field label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.f-field input,.f-field select,.f-field textarea{border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:var(--font);color:var(--text);background:var(--white)}
+.f-field input:focus,.f-field select:focus,.f-field textarea:focus{outline:2px solid var(--red);border-color:transparent}
+.f-field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.add-btn{background:transparent;border:1.5px dashed var(--border);border-radius:7px;padding:9px 16px;font-size:13px;color:var(--muted);cursor:pointer;width:100%;margin-top:8px;font-family:var(--font)}
+.add-btn:hover{border-color:var(--red);color:var(--red)}
+.remove-btn{background:none;border:none;color:#c00;cursor:pointer;font-size:12px;margin-left:auto;font-family:var(--font);padding:2px 8px}
+.item-header{display:flex;align-items:center;margin-bottom:12px}
+.item-num{background:var(--red);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.item-label{font-size:13px;font-weight:600;margin-left:8px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.save-row{display:flex;gap:10px;margin-top:20px}
+.btn-save{background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 24px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.btn-save:hover{background:var(--red-mid)}
+.btn-sec{background:var(--white);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:10px 20px;font-size:13px;cursor:pointer;font-family:var(--font)}
+.btn-sec:hover{border-color:var(--red);color:var(--red)}
+.saved-badge{font-size:12px;color:var(--green);display:none;align-items:center;gap:5px;margin-left:auto}
+.saved-badge.show{display:flex}
+
+/* ---- PREVIEW RESUME ---- */
+.preview-wrap{background:#e8e8e8;padding:24px;min-height:calc(100vh - 56px)}
+.resume-page{background:#fff;width:794px;margin:0 auto;padding:32px 36px 48px;font-family:'Calibri','Calibri Body',Calibri,sans-serif;font-size:9.5pt;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.15);min-height:1123px;line-height:1.35}
+.resume-header-row{display:flex;align-items:center;border-bottom:2.5px solid #000;padding-bottom:8px;margin-bottom:6px;gap:10px}
+.resume-name{font-size:20pt;font-weight:700;letter-spacing:.5px;line-height:1.1}
+.resume-info{font-size:8.5pt;margin-top:3px;color:#000}
+.resume-logo-box{width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #000;border-radius:50%;overflow:hidden}
+.resume-section-title{background:#000;color:#fff;font-size:9pt;font-weight:700;padding:2px 7px;margin:8px 0 3px;text-transform:uppercase;letter-spacing:.8px;display:block}
+.edu-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:2px}
+.edu-table th{background:#d9d9d9;padding:3px 6px;border:1px solid #000;font-weight:700;text-align:left;font-size:8.5pt}
+.edu-table td{padding:3px 6px;border:1px solid #000;font-size:8.5pt}
+.skills-row{font-size:9pt;padding:4px 0 0}
+.intern-heading{font-weight:700;font-size:9pt;display:flex;justify-content:space-between;align-items:baseline;margin-top:4px}
+.intern-dur{font-weight:700;font-size:9pt}
+.intern-bullet{margin-left:18px;font-size:9pt;list-style:disc;margin-top:1px;margin-bottom:4px}
+.intern-bullet li{margin-bottom:1px;padding-left:2px}
+.proj-table{width:100%;border-collapse:collapse;margin-top:2px}
+.proj-left{width:150px;font-weight:700;font-size:9pt;padding:3px 8px 3px 0;vertical-align:top;border-right:1px solid #ccc}
+.proj-right{font-size:9pt;vertical-align:top;padding:3px 8px}
+.award-table{width:100%;border-collapse:collapse;margin-top:2px}
+.award-cat{font-weight:700;font-size:9pt;padding:2px 10px 4px 0;vertical-align:top;width:170px;border-right:1px solid #ccc}
+.award-content{font-size:9pt;vertical-align:top;padding:2px 0 4px 10px}
+.por-heading{font-weight:700;display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;margin-top:4px}
+.por-bullet{margin-left:18px;font-size:9pt;list-style:disc;margin-top:1px;margin-bottom:4px}
+.interest-table{width:100%;border-collapse:collapse;margin-top:2px}
+.interest-cat{font-weight:700;font-size:9pt;padding:2px 10px 4px 0;width:150px;vertical-align:top;border-right:1px solid #ccc}
+.interest-val{font-size:9pt;vertical-align:top;padding:2px 0 4px 10px}
+.resume-footer{position:absolute;bottom:16px;left:36px;right:36px;border-top:1px solid #999;padding-top:4px;font-size:7pt;color:#555;text-align:center}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:72pt;color:rgba(0,0,0,.04);font-weight:900;pointer-events:none;white-space:nowrap;z-index:0;letter-spacing:8px}
+.resume-content{position:relative;z-index:1}
+.dl-btn{display:block;width:fit-content;margin:0 auto 20px;background:var(--red);color:#fff;border:none;padding:11px 32px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
+
+/* ---- ADMIN DASHBOARD ---- */
+.admin-wrap{padding:24px}
+.admin-title{font-size:22px;font-weight:700;margin-bottom:4px}
+.admin-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+.stat-num{font-size:28px;font-weight:700;color:var(--red)}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.search-row{display:flex;gap:10px;margin-bottom:16px}
+.search-row input{flex:1;border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13px;font-family:var(--font)}
+.search-row input:focus{outline:2px solid var(--red);border-color:transparent}
+.upload-btn{background:var(--white);border:1px solid var(--border);border-radius:7px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:var(--font);color:var(--text)}
+.upload-btn:hover{border-color:var(--red);color:var(--red)}
+.student-table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.student-table th{background:#fafafa;padding:11px 14px;font-size:12px;font-weight:600;text-align:left;border-bottom:1px solid var(--border);color:var(--muted)}
+.student-table td{padding:11px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
+.student-table tr:last-child td{border-bottom:none}
+.status-pill{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600}
+.status-pill.done{background:var(--green-light);color:var(--green)}
+.status-pill.partial{background:#fff8e0;color:#a06000}
+.status-pill.pending{background:#f5f5f5;color:var(--muted)}
+.view-link{color:var(--red);cursor:pointer;font-size:12px;font-weight:600;border:none;background:none;font-family:var(--font)}
+.view-link:hover{text-decoration:underline}
+
+/* ---- EMAIL UPLOAD MODAL ---- */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--white);border-radius:12px;padding:28px;width:480px;max-width:95vw}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.modal-btns{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div>
+    <span class="nav-logo">SSCBS · Career Development Centre</span>
+    <span class="nav-sub">Resume Builder</span>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+    <span class="nav-user" id="nav-user-label" style="display:none"></span>
+    <button class="nav-btn" id="nav-logout-btn" style="display:none" onclick="logout()">Log out</button>
+  </div>
+</div>
+
+<!-- SCREEN: LOGIN -->
+<div class="screen active" id="screen-login">
+<div class="login-wrap">
+<div class="login-card">
+  <div class="login-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="52" height="52">
+      <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/>
+      <ellipse cx="40" cy="18" rx="4.5" ry="7" fill="#fff"/>
+      <polygon points="40,10 37,20 43,20" fill="#fff"/>
+      <rect x="38.5" y="24" width="3" height="12" fill="#fff"/>
+      <rect x="27" y="36" width="26" height="17" rx="1" fill="none" stroke="#fff" stroke-width="1.3"/>
+      <line x1="40" y1="36" x2="40" y2="53" stroke="#fff" stroke-width="0.8"/>
+      <line x1="30" y1="41" x2="38" y2="41" stroke="#fff" stroke-width="0.7"/>
+      <line x1="30" y1="44" x2="38" y2="44" stroke="#fff" stroke-width="0.7"/>
+      <line x1="30" y1="47" x2="38" y2="47" stroke="#fff" stroke-width="0.7"/>
+      <line x1="42" y1="41" x2="50" y2="41" stroke="#fff" stroke-width="0.7"/>
+      <line x1="42" y1="44" x2="50" y2="44" stroke="#fff" stroke-width="0.7"/>
+      <line x1="42" y1="47" x2="50" y2="47" stroke="#fff" stroke-width="0.7"/>
+    </svg>
+  </div>
+  <div class="login-title">CDC Resume Builder</div>
+  <div class="login-sub">Shaheed Sukhdev College of Business Studies</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchLoginTab('student')">Student Login</button>
+    <button class="tab" onclick="switchLoginTab('admin')">Admin / CDC</button>
+  </div>
+  <!-- Student -->
+  <div id="login-student">
+    <div class="field"><label>College Email ID</label><input id="s-email" type="email" placeholder="name.24999@sscbs.du.ac.in"></div>
+    <div class="field"><label>Password</label><input id="s-pass" type="password" placeholder="Enter your password"></div>
+    <button class="btn-primary" onclick="studentLogin()">Sign In</button>
+    <div style="margin-top:14px;font-size:12px;color:var(--muted)">First time? <a href="#" style="color:var(--red)" onclick="showRegister()">Set your password</a></div>
+  </div>
+  <!-- Student Register -->
+  <div id="login-register" style="display:none">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Enter your college email to set a new password. Only pre-approved emails can register.</div>
+    <div class="field"><label>College Email ID</label><input id="r-email" type="email" placeholder="name.24999@sscbs.du.ac.in"></div>
+    <div class="field"><label>New Password</label><input id="r-pass" type="password" placeholder="Min 6 characters"></div>
+    <div class="field"><label>Confirm Password</label><input id="r-pass2" type="password" placeholder="Repeat password"></div>
+    <button class="btn-primary" onclick="registerStudent()">Create Account</button>
+    <div style="margin-top:14px;font-size:12px;color:var(--muted)"><a href="#" style="color:var(--red)" onclick="showLogin()">← Back to login</a></div>
+  </div>
+  <!-- Admin -->
+  <div id="login-admin" style="display:none">
+    <div class="field"><label>Admin Email</label><input id="a-email" type="email" placeholder="cdc@sscbs.du.ac.in"></div>
+    <div class="field"><label>Password</label><input id="a-pass" type="password" placeholder="Admin password"></div>
+    <button class="btn-primary" onclick="adminLogin()">Sign In as Admin</button>
+  </div>
+  <div class="msg" id="login-msg"></div>
+</div>
+</div>
+</div>
+
+<!-- SCREEN: STUDENT DASHBOARD -->
+<div class="screen" id="screen-student">
+<div class="dash">
+  <div class="sidebar">
+    <div class="sidebar-item active" onclick="showSection('personal')" id="nav-personal"><span class="icon">👤</span>Personal Info</div>
+    <div class="sidebar-item" onclick="showSection('education')" id="nav-education"><span class="icon">🎓</span>Education</div>
+    <div class="sidebar-item" onclick="showSection('internships')" id="nav-internships"><span class="icon">💼</span>Internships</div>
+    <div class="sidebar-item" onclick="showSection('projects')" id="nav-projects"><span class="icon">📁</span>Projects</div>
+    <div class="sidebar-item" onclick="showSection('awards')" id="nav-awards"><span class="icon">🏆</span>Awards</div>
+    <div class="sidebar-item" onclick="showSection('por')" id="nav-por"><span class="icon">🌟</span>Positions of Resp.</div>
+    <div class="sidebar-item" onclick="showSection('interests')" id="nav-interests"><span class="icon">🎯</span>Other Interests</div>
+    <div class="sidebar-item" onclick="showSection('preview')" id="nav-preview"><span class="icon">👁️</span>Preview & Download</div>
+    <div class="sidebar-prog">
+      <div style="font-size:11px;color:var(--muted);font-weight:600">COMPLETION</div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px" id="prog-text">0% complete</div>
+    </div>
+  </div>
+  <div class="main" id="main-content">
+    <!-- Sections injected here -->
+  </div>
+</div>
+</div>
+
+<!-- SCREEN: ADMIN -->
+<div class="screen" id="screen-admin">
+<div class="admin-wrap">
+  <div class="admin-title">Admin Dashboard</div>
+  <div class="admin-sub">Career Development Centre — Resume Management</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total Students</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-complete">0</div><div class="stat-lbl">Completed Resumes</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-partial">0</div><div class="stat-lbl">In Progress</div></div>
+  </div>
+  <div class="search-row">
+    <input id="admin-search" type="text" placeholder="Search by name or email..." oninput="renderAdminTable()">
+    <button class="upload-btn" onclick="openUploadModal()">+ Upload Email List</button>
+    <button class="upload-btn" onclick="exportAll()" style="background:var(--red);color:#fff;border-color:var(--red)">Download All Resumes</button>
+  </div>
+  <table class="student-table">
+    <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Course</th><th>Status</th><th>Last Saved</th><th>Action</th></tr></thead>
+    <tbody id="admin-tbody"></tbody>
+  </table>
+</div>
+</div>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-bg" id="upload-modal">
+<div class="modal">
+  <div class="modal-title">Upload Student Email List</div>
+  <div class="modal-sub">Paste email addresses (one per line) or upload a .txt/.csv file. Only these emails will be allowed to register.</div>
+  <textarea id="email-bulk" style="width:100%;height:140px;border:1px solid var(--border);border-radius:7px;padding:10px;font-size:13px;font-family:var(--font);resize:vertical" placeholder="name1.24001@sscbs.du.ac.in&#10;name2.24002@sscbs.du.ac.in&#10;..."></textarea>
+  <div class="modal-btns">
+    <button class="btn-sec" onclick="closeUploadModal()">Cancel</button>
+    <button class="btn-save" onclick="bulkUploadEmails()">Add Emails</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ---- STATE ----
+let currentUser = null;
+let currentRole = null;
+let currentSection = 'personal';
+
+// Storage helpers (localStorage simulation per our architecture)
+function store(key, val){ try{localStorage.setItem(key,JSON.stringify(val))}catch(e){} }
+function load(key,def){ try{const v=localStorage.getItem(key);return v?JSON.parse(v):def}catch(e){return def} }
+
+// Approved emails (admin uploads these)
+function getApprovedEmails(){ return load('approved_emails',['demo.student@sscbs.du.ac.in','test.24001@sscbs.du.ac.in']) }
+function getUsers(){ return load('users',{}) }
+function saveUsers(u){ store('users',u) }
+function getResumeData(email){ return load('resume_'+email, {}) }
+function saveResumeData(email,data){ store('resume_'+email,data) }
+
+// ---- PASSWORD SECURITY ----
+// Passwords are hashed using SHA-256 via Web Crypto API before storage.
+// Even if someone opens DevTools and reads localStorage, they will only see
+// hashed values — never the actual password. Hashes cannot be reversed.
+async function hashPassword(pass){
+  const enc = new TextEncoder().encode(pass + 'sscbs_cdc_salt_2025');
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Admin credentials — stored as hash (cdc2025)
+const ADMIN_EMAIL = 'cdc@sscbs.du.ac.in';
+const ADMIN_PASS_HASH = '0350ae6edc65350fa7020500f1fb9c3b4a75d902d51928e7885bc2e5b65cb172'; // hash of 'cdc2025'
+
+// ---- AUTH ----
+function switchLoginTab(tab){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',(tab==='student'&&i===0)||(tab==='admin'&&i===1)));
+  document.getElementById('login-student').style.display = tab==='student'?'block':'none';
+  document.getElementById('login-admin').style.display = tab==='admin'?'block':'none';
+  document.getElementById('login-register').style.display = 'none';
+  clearMsg();
+}
+function showRegister(){ document.getElementById('login-student').style.display='none'; document.getElementById('login-register').style.display='block'; clearMsg(); return false; }
+function showLogin(){ document.getElementById('login-student').style.display='block'; document.getElementById('login-register').style.display='none'; clearMsg(); return false; }
+function showMsg(msg,type){ const el=document.getElementById('login-msg'); el.textContent=msg; el.className='msg '+type; }
+function clearMsg(){ document.getElementById('login-msg').className='msg'; }
+
+async function studentLogin(){
+  const email=document.getElementById('s-email').value.trim().toLowerCase();
+  const pass=document.getElementById('s-pass').value;
+  const users=getUsers();
+  if(!email||!pass){showMsg('Please fill in all fields','error');return;}
+  if(!users[email]){showMsg('Email not found. Please register first or contact CDC.','error');return;}
+  const h=await hashPassword(pass);
+  const stored=users[email].pass;
+  const isLegacy=(stored.length!==64);
+  if(isLegacy){
+    if(stored!==pass){showMsg('Incorrect password','error');return;}
+    users[email].pass=h; saveUsers(users);
+  } else {
+    if(stored!==h){showMsg('Incorrect password','error');return;}
+  }
+  currentUser=email; currentRole='student';
+  gotoStudentDashboard();
+}
+
+async function registerStudent(){
+  const email=document.getElementById('r-email').value.trim().toLowerCase();
+  const pass=document.getElementById('r-pass').value;
+  const pass2=document.getElementById('r-pass2').value;
+  if(!email||!pass||!pass2){showMsg('Please fill in all fields','error');return;}
+  if(pass!==pass2){showMsg('Passwords do not match','error');return;}
+  if(pass.length<6){showMsg('Password must be at least 6 characters','error');return;}
+  const approved=getApprovedEmails();
+  if(!approved.includes(email)){showMsg('This email is not on the approved list. Contact CDC to get access.','error');return;}
+  const users=getUsers();
+  if(users[email]){showMsg('Account already exists. Please log in.','error');return;}
+  const h=await hashPassword(pass);
+  users[email]={pass:h,registered:new Date().toISOString()};
+  saveUsers(users);
+  showMsg('Account created! You can now log in.','success');
+  setTimeout(()=>showLogin(),1500);
+}
+
+async function adminLogin(){
+  const email=document.getElementById('a-email').value.trim().toLowerCase();
+  const pass=document.getElementById('a-pass').value;
+  if(email===ADMIN_EMAIL){
+    const h=await hashPassword(pass);
+    if(h===ADMIN_PASS_HASH){ currentRole='admin'; gotoAdmin(); return; }
+  }
+  showMsg('Invalid admin credentials','error');
+}
+
+function logout(){
+  currentUser=null; currentRole=null;
+  document.getElementById('nav-user-label').style.display='none';
+  document.getElementById('nav-logout-btn').style.display='none';
+  showScreen('screen-login');
+}
+
+function gotoStudentDashboard(){
+  document.getElementById('nav-user-label').textContent=currentUser;
+  document.getElementById('nav-user-label').style.display='inline';
+  document.getElementById('nav-logout-btn').style.display='inline';
+  showScreen('screen-student');
+  showSection('personal');
+  updateProgress();
+}
+
+function gotoAdmin(){
+  document.getElementById('nav-user-label').textContent='Admin · CDC';
+  document.getElementById('nav-user-label').style.display='inline';
+  document.getElementById('nav-logout-btn').style.display='inline';
+  showScreen('screen-admin');
+  renderAdminTable();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ---- SECTIONS ----
+function showSection(sec){
+  currentSection=sec;
+  document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
+  const nav=document.getElementById('nav-'+sec);
+  if(nav) nav.classList.add('active');
+  const main=document.getElementById('main-content');
+  main.innerHTML=renderSection(sec);
+  loadSectionData(sec);
+}
+
+function renderSection(sec){
+  if(sec==='personal') return renderPersonal();
+  if(sec==='education') return renderEducation();
+  if(sec==='internships') return renderInternships();
+  if(sec==='projects') return renderProjects();
+  if(sec==='awards') return renderAwards();
+  if(sec==='por') return renderPOR();
+  if(sec==='interests') return renderInterests();
+  if(sec==='preview') return renderPreviewSection();
+  return '';
+}
+
+// Save helper
+function saveSection(sec){
+  const data=getResumeData(currentUser)||{};
+  if(sec==='personal'){
+    data.personal={
+      name:v('p-name'),dob:v('p-dob'),email:v('p-email'),phone:v('p-phone'),linkedin:v('p-linkedin')
+    };
+  }
+  if(sec==='education'){
+    data.education={
+      course:v('e-course'),institution:v('e-inst'),semester:v('e-sem'),cgpa:v('e-cgpa'),
+      xii_stream:v('e-xiist'),xii_school:v('e-xiisch'),xii_year:v('e-xiiyr'),xii_perf:v('e-xiiperf'),
+      x_school:v('e-xsch'),x_year:v('e-xyr'),x_perf:v('e-xperf'),
+      skills:v('e-skills')
+    };
+    // extra edu rows
+    const extras=[];
+    document.querySelectorAll('.extra-edu-row').forEach(row=>{
+      extras.push({qual:row.querySelector('.eq-qual').value,org:row.querySelector('.eq-org').value,year:row.querySelector('.eq-year').value,perf:row.querySelector('.eq-perf').value});
+    });
+    data.education.extras=extras;
+  }
+  if(sec==='internships'){
+    const items=[];
+    document.querySelectorAll('.intern-item').forEach(row=>{
+      items.push({company:row.querySelector('.ii-company').value,profile:row.querySelector('.ii-profile').value,duration:row.querySelector('.ii-dur').value,desc1:row.querySelector('.ii-d1').value,desc2:row.querySelector('.ii-d2').value});
+    });
+    data.internships=items;
+  }
+  if(sec==='projects'){
+    const items=[];
+    document.querySelectorAll('.proj-item').forEach(row=>{
+      items.push({name:row.querySelector('.pi-name').value,subject:row.querySelector('.pi-subject').value,highlight:row.querySelector('.pi-hl').value,desc1:row.querySelector('.pi-d1').value,desc2:row.querySelector('.pi-d2').value});
+    });
+    data.projects=items;
+  }
+  if(sec==='awards'){
+    const items=[];
+    document.querySelectorAll('.award-item').forEach(row=>{
+      items.push({category:row.querySelector('.ai-cat').value,awards:row.querySelector('.ai-awards').value});
+    });
+    data.awards=items;
+  }
+  if(sec==='por'){
+    const items=[];
+    document.querySelectorAll('.por-item').forEach(row=>{
+      items.push({position:row.querySelector('.pi2-pos').value,org:row.querySelector('.pi2-org').value,duration:row.querySelector('.pi2-dur').value,desc1:row.querySelector('.pi2-d1').value,desc2:row.querySelector('.pi2-d2').value});
+    });
+    data.por=items;
+  }
+  if(sec==='interests'){
+    const items=[];
+    document.querySelectorAll('.int-item').forEach(row=>{
+      items.push({category:row.querySelector('.ini-cat').value,detail:row.querySelector('.ini-det').value});
+    });
+    data.interests=items;
+  }
+  data.lastSaved=new Date().toLocaleString();
+  saveResumeData(currentUser,data);
+  updateProgress();
+  const badge=document.getElementById('saved-badge');
+  if(badge){badge.classList.add('show');setTimeout(()=>badge.classList.remove('show'),2000);}
+}
+
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
+
+function loadSectionData(sec){
+  const data=getResumeData(currentUser)||{};
+  if(sec==='personal'&&data.personal){
+    const p=data.personal;
+    setV('p-name',p.name);setV('p-dob',p.dob);setV('p-email',p.email);setV('p-phone',p.phone);setV('p-linkedin',p.linkedin);
+  }
+  if(sec==='education'&&data.education){
+    const e=data.education;
+    setV('e-course',e.course);setV('e-inst',e.institution);setV('e-sem',e.semester);setV('e-cgpa',e.cgpa);
+    setV('e-xiist',e.xii_stream);setV('e-xiisch',e.xii_school);setV('e-xiiyr',e.xii_year);setV('e-xiiperf',e.xii_perf);
+    setV('e-xsch',e.x_school);setV('e-xyr',e.x_year);setV('e-xperf',e.x_perf);setV('e-skills',e.skills);
+    if(e.extras&&e.extras.length){
+      const cont=document.getElementById('extra-edu-cont');
+      if(cont){cont.innerHTML='';e.extras.forEach(ex=>addExtraEduRow(ex));}
+    }
+  }
+  if(sec==='internships'&&data.internships){
+    const cont=document.getElementById('intern-cont');
+    if(cont){cont.innerHTML='';data.internships.forEach((it,i)=>addInternRow(it,i+1));}
+  }
+  if(sec==='projects'&&data.projects){
+    const cont=document.getElementById('proj-cont');
+    if(cont){cont.innerHTML='';data.projects.forEach((it,i)=>addProjRow(it,i+1));}
+  }
+  if(sec==='awards'&&data.awards){
+    const cont=document.getElementById('award-cont');
+    if(cont){cont.innerHTML='';data.awards.forEach((it,i)=>addAwardRow(it,i+1));}
+  }
+  if(sec==='por'&&data.por){
+    const cont=document.getElementById('por-cont');
+    if(cont){cont.innerHTML='';data.por.forEach((it,i)=>addPORRow(it,i+1));}
+  }
+  if(sec==='interests'&&data.interests){
+    const cont=document.getElementById('int-cont');
+    if(cont){cont.innerHTML='';data.interests.forEach((it,i)=>addInterestRow(it,i+1));}
+  }
+}
+function setV(id,val){const el=document.getElementById(id);if(el&&val!==undefined)el.value=val;}
+
+function updateProgress(){
+  const data=getResumeData(currentUser)||{};
+  let done=0, total=7;
+  if(data.personal&&data.personal.name) done++;
+  if(data.education&&data.education.course) done++;
+  if(data.internships&&data.internships.length) done++;
+  if(data.projects&&data.projects.length) done++;
+  if(data.awards&&data.awards.length) done++;
+  if(data.por&&data.por.length) done++;
+  if(data.interests&&data.interests.length) done++;
+  const pct=Math.round(done/total*100);
+  const fill=document.getElementById('prog-fill');
+  const txt=document.getElementById('prog-text');
+  if(fill) fill.style.width=pct+'%';
+  if(txt) txt.textContent=pct+'% complete';
+}
+
+// ---- SECTION RENDERERS ----
+function saveRow(sec){ return `<div class="save-row"><button class="btn-save" onclick="saveSection('${sec}')">Save Progress</button><span class="saved-badge" id="saved-badge">✓ Saved</span></div>`; }
+
+function renderPersonal(){
+  return `<div class="section-title">Personal Information</div>
+  <div class="section-sub">This appears in the header of your resume</div>
+  <div class="form-card">
+    <div class="form-card-title">📋 Header Details</div>
+    <div class="form-row"><div class="f-field"><label>Full Name (in CAPITALS)</label><input id="p-name" placeholder="FIRSTNAME LASTNAME" style="text-transform:uppercase"></div>
+    <div class="f-field"><label>Date of Birth (DD/MM/YYYY)</label><input id="p-dob" placeholder="15/08/2003"></div></div>
+    <div class="form-row"><div class="f-field"><label>Official College Email</label><input id="p-email" placeholder="name.24999@sscbs.du.ac.in"></div>
+    <div class="f-field"><label>Phone (+91 XX XXX XX XXX)</label><input id="p-phone" placeholder="+91 99 999 99 999"></div></div>
+    <div class="form-row single"><div class="f-field"><label>LinkedIn Profile URL</label><input id="p-linkedin" placeholder="https://linkedin.com/in/yourname"></div></div>
+  </div>
+  ${saveRow('personal')}`;
+}
+
+function renderEducation(){
+  return `<div class="section-title">Educational Qualifications & Skills</div>
+  <div class="section-sub">Fill in your academic details in reverse chronological order</div>
+  <div class="form-card">
+    <div class="form-card-title">🎓 Current Degree</div>
+    <div class="form-row"><div class="f-field"><label>Course/Examination</label><input id="e-course" placeholder="Bachelor of Management Studies"></div>
+    <div class="f-field"><label>Institution</label><input id="e-inst" value="Shaheed Sukhdev College of Business Studies (University of Delhi)"></div></div>
+    <div class="form-row"><div class="f-field"><label>Year of Passing</label><input id="e-sem" placeholder="Pursuing"></div>
+    <div class="f-field"><label>Performance (CGPA)</label><input id="e-cgpa" placeholder="9.92 CGPA (Till 2nd Semester)"></div></div>
+  </div>
+  <div class="form-card">
+    <div class="form-card-title">📚 Class XII (AISSCE)</div>
+    <div class="form-row triple"><div class="f-field"><label>Stream</label><input id="e-xiist" placeholder="Commerce / Science / Humanities"></div>
+    <div class="f-field"><label>School Name (City)</label><input id="e-xiisch" placeholder="DPS, New Delhi"></div>
+    <div class="f-field"><label>Year of Passing</label><input id="e-xiiyr" placeholder="2024"></div></div>
+    <div class="form-row single"><div class="f-field"><label>Performance (% and marks)</label><input id="e-xiiperf" placeholder="94.4% [472/500]"></div></div>
+  </div>
+  <div class="form-card">
+    <div class="form-card-title">📚 Class X (AISSE)</div>
+    <div class="form-row triple"><div class="f-field"><label>School Name (City)</label><input id="e-xsch" placeholder="DPS, New Delhi"></div>
+    <div class="f-field"><label>Year of Passing</label><input id="e-xyr" placeholder="2022"></div>
+    <div class="f-field"><label>Performance</label><input id="e-xperf" placeholder="95.4% [477/500]"></div></div>
+  </div>
+  <div class="form-card">
+    <div class="form-card-title">📜 Other Educational Qualifications (CA/CS/Online Courses etc.)</div>
+    <div id="extra-edu-cont"></div>
+    <button class="add-btn" onclick="addExtraEduRow()">+ Add Qualification</button>
+  </div>
+  <div class="form-card">
+    <div class="form-card-title">💻 Technical Skills</div>
+    <div class="form-row single"><div class="f-field"><label>Skills (comma separated — proofs required at authentication)</label>
+    <input id="e-skills" placeholder="Python, R, Tableau, Power BI, MS Excel"></div></div>
+  </div>
+  ${saveRow('education')}`;
+}
+
+let extraEduCount=0;
+function addExtraEduRow(data){
+  extraEduCount++;
+  const cont=document.getElementById('extra-edu-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='extra-edu-row';
+  div.style.cssText='margin-bottom:14px;';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${extraEduCount}</div><div class="item-label">Qualification</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row"><div class="f-field"><label>Course/Qualification</label><input class="eq-qual" placeholder="CA Foundation / Coursera - Financial Modeling"></div>
+  <div class="f-field"><label>Organization/Platform</label><input class="eq-org" placeholder="ICAI / Coursera (IIT Bombay)"></div></div>
+  <div class="form-row"><div class="f-field"><label>Year</label><input class="eq-year" placeholder="2024"></div>
+  <div class="f-field"><label>Performance/Status</label><input class="eq-perf" placeholder="Cleared Level 1 (May 2024)"></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.eq-qual').value=data.qual||'';div.querySelector('.eq-org').value=data.org||'';div.querySelector('.eq-year').value=data.year||'';div.querySelector('.eq-perf').value=data.perf||'';}
+}
+
+function renderInternships(){
+  return `<div class="section-title">Internships, Live Projects & Startups</div>
+  <div class="section-sub">List in reverse chronological order. Internship = 4+ weeks. Below 4 weeks = Live Project.</div>
+  <div id="intern-cont"></div>
+  <button class="add-btn" onclick="addInternRow()">+ Add Internship / Live Project</button>
+  <div style="height:16px"></div>
+  ${saveRow('internships')}`;
+}
+
+let internCount=0;
+function addInternRow(data, num){
+  internCount++;
+  const cont=document.getElementById('intern-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='form-card intern-item';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${num||internCount}</div><div class="item-label">Internship / Live Project</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row"><div class="f-field"><label>Company Name</label><input class="ii-company" placeholder="ABC Consulting"></div>
+  <div class="f-field"><label>Profile / Live Project Name</label><input class="ii-profile" placeholder="Business Analyst / Market Research"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Duration (e.g. 6 weeks, June – July 2024)</label><input class="ii-dur" placeholder="6 weeks, June – July 2024"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Description Point 1 (no full stop)</label><textarea class="ii-d1" rows="2" placeholder="Analysed market trends across 3 sectors to identify growth opportunities worth ₹2Cr"></textarea></div></div>
+  <div class="form-row single"><div class="f-field"><label>Description Point 2 (no full stop)</label><textarea class="ii-d2" rows="2" placeholder="Developed Excel dashboard tracking 15 KPIs, reducing reporting time by 40%"></textarea></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.ii-company').value=data.company||'';div.querySelector('.ii-profile').value=data.profile||'';div.querySelector('.ii-dur').value=data.duration||'';div.querySelector('.ii-d1').value=data.desc1||'';div.querySelector('.ii-d2').value=data.desc2||'';}
+}
+
+function renderProjects(){
+  return `<div class="section-title">Projects Undertaken & Publications</div>
+  <div class="section-sub">Include academic projects, research papers, or publications</div>
+  <div id="proj-cont"></div>
+  <button class="add-btn" onclick="addProjRow()">+ Add Project / Publication</button>
+  <div style="height:16px"></div>
+  ${saveRow('projects')}`;
+}
+
+let projCount=0;
+function addProjRow(data, num){
+  projCount++;
+  const cont=document.getElementById('proj-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='form-card proj-item';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${num||projCount}</div><div class="item-label">Project / Publication</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row"><div class="f-field"><label>Project/Publication Name</label><input class="pi-name" placeholder="Market Volatility Analysis"></div>
+  <div class="f-field"><label>Subject / Publisher</label><input class="pi-subject" placeholder="Financial Economics / Emerald Publishing"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Highlight / Sub-heading</label><input class="pi-hl" placeholder="Applied CAPM model across 50 NSE-listed stocks"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Description Point 1</label><textarea class="pi-d1" rows="2" placeholder="Studied price movements of 50 blue-chip stocks over 5 years"></textarea></div></div>
+  <div class="form-row single"><div class="f-field"><label>Description Point 2</label><textarea class="pi-d2" rows="2" placeholder="Identified correlation between sectoral indices and market-wide returns"></textarea></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.pi-name').value=data.name||'';div.querySelector('.pi-subject').value=data.subject||'';div.querySelector('.pi-hl').value=data.highlight||'';div.querySelector('.pi-d1').value=data.desc1||'';div.querySelector('.pi-d2').value=data.desc2||'';}
+}
+
+function renderAwards(){
+  return `<div class="section-title">Awards & Achievements</div>
+  <div class="section-sub">Group by category. Year in bold brackets [20XX]. Reverse chronological order.</div>
+  <div id="award-cont"></div>
+  <button class="add-btn" onclick="addAwardRow()">+ Add Category</button>
+  <div style="height:16px"></div>
+  <div style="background:#fff8e0;border:1px solid #ffe082;border-radius:8px;padding:12px 14px;font-size:12px;color:#7a5800;margin-top:8px">
+  💡 <strong>Tip:</strong> Use categories like "National Case Competitions", "Debating Achievements", "Personal Awards & Achievements", "Entrepreneurial Accolades". Year format: [2024] or [2023, 2024] or [2020 – 2024]
+  </div>
+  ${saveRow('awards')}`;
+}
+
+let awardCount=0;
+function addAwardRow(data, num){
+  awardCount++;
+  const cont=document.getElementById('award-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='form-card award-item';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${num||awardCount}</div><div class="item-label">Award Category</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row single"><div class="f-field"><label>Category Name</label><input class="ai-cat" placeholder="National Case Competitions"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Awards (one per line — format: Award/Achievement – Event Name – Organisation [Year])</label><textarea class="ai-awards" rows="4" placeholder="1st Runner-Up – IIM Ahmedabad Case Comp – IIM Ahmedabad [2024]&#10;Finalist – XLRI Strategy Challenge – XLRI [2024]"></textarea></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.ai-cat').value=data.category||'';div.querySelector('.ai-awards').value=data.awards||'';}
+}
+
+function renderPOR(){
+  return `<div class="section-title">Positions of Responsibility</div>
+  <div class="section-sub">Each society/organisation should appear only once. List in reverse chronological order.</div>
+  <div id="por-cont"></div>
+  <button class="add-btn" onclick="addPORRow()">+ Add Position</button>
+  <div style="height:16px"></div>
+  ${saveRow('por')}`;
+}
+
+let porCount=0;
+function addPORRow(data, num){
+  porCount++;
+  const cont=document.getElementById('por-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='form-card por-item';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${num||porCount}</div><div class="item-label">Position of Responsibility</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row"><div class="f-field"><label>Position / Role</label><input class="pi2-pos" placeholder="President / Vice President"></div>
+  <div class="f-field"><label>Organisation – Institution</label><input class="pi2-org" placeholder="Finance Society – SSCBS"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Duration (e.g. August 2024 – Present)</label><input class="pi2-dur" placeholder="August 2024 – Present"></div></div>
+  <div class="form-row single"><div class="f-field"><label>Role & Impact Point 1 (no full stop)</label><textarea class="pi2-d1" rows="2" placeholder="Led a team of 25 members across 5 committees to organise SSCBS Finance Conclave"></textarea></div></div>
+  <div class="form-row single"><div class="f-field"><label>Role & Impact Point 2 (no full stop)</label><textarea class="pi2-d2" rows="2" placeholder="Secured ₹3L in sponsorships from 8 industry partners for annual flagship event"></textarea></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.pi2-pos').value=data.position||'';div.querySelector('.pi2-org').value=data.org||'';div.querySelector('.pi2-dur').value=data.duration||'';div.querySelector('.pi2-d1').value=data.desc1||'';div.querySelector('.pi2-d2').value=data.desc2||'';}
+}
+
+function renderInterests(){
+  return `<div class="section-title">Other Interests & Activities</div>
+  <div class="section-sub">Keep it brief. You can create your own category names (e.g. Public Speaking, Music, Sports)</div>
+  <div id="int-cont"></div>
+  <button class="add-btn" onclick="addInterestRow()">+ Add Category</button>
+  <div style="height:16px"></div>
+  ${saveRow('interests')}`;
+}
+
+let intCount=0;
+function addInterestRow(data, num){
+  intCount++;
+  const cont=document.getElementById('int-cont');
+  if(!cont) return;
+  const div=document.createElement('div');
+  div.className='form-card int-item';
+  div.innerHTML=`<div class="item-header"><div class="item-num">${num||intCount}</div><div class="item-label">Interest / Activity</div><button class="remove-btn" onclick="this.parentElement.parentElement.remove()">✕ Remove</button></div>
+  <div class="form-row"><div class="f-field"><label>Category Name</label><input class="ini-cat" placeholder="Public Speaking / Music / Sports"></div>
+  <div class="f-field"><label>Details (brief, no full stop)</label><input class="ini-det" placeholder="Represented college at 3 MUNs; participated in inter-college debate competitions"></div></div>`;
+  cont.appendChild(div);
+  if(data){div.querySelector('.ini-cat').value=data.category||'';div.querySelector('.ini-det').value=data.detail||'';}
+}
+
+function renderPreviewSection(){
+  const data=getResumeData(currentUser)||{};
+  return `<div class="section-title">Preview & Download</div>
+  <div class="section-sub">Review your resume before downloading. Make sure all sections are filled.</div>
+  <div style="background:#e0e0e0;padding:20px;border-radius:10px;overflow-x:auto">
+  ${buildResumeHTML(data)}
+  </div>
+  <div style="margin-top:20px;display:flex;gap:12px">
+  <button class="btn-save" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button class="btn-sec" onclick="showSection('personal')">← Edit Resume</button>
+  </div>`;
+}
+
+function buildResumeHTML(data){
+  const p=data.personal||{};
+  const e=data.education||{};
+  const interns=data.internships||[];
+  const projs=data.projects||[];
+  const awards=data.awards||[];
+  const pors=data.por||[];
+  const ints=data.interests||[];
+
+  let html=`<div class="resume-page">
+  <div class="watermark">SSCBS</div>
+  <div class="resume-content">
+  <div class="resume-header-row">
+    <div style="flex:1">
+      <div class="resume-name">${p.name||'YOUR FULL NAME'}</div>
+      <div class="resume-info">DOB: ${p.dob||'DD/MM/YYYY'} | ${p.email||'email@sscbs.du.ac.in'} | ${p.phone||'+91 99 999 99 999'} | <a href="${p.linkedin||'#'}" style="color:#000;text-decoration:underline">LinkedIn</a></div>
+    </div>
+    <div class="resume-logo-box">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="56" height="56">
+        <!-- Outer circle -->
+        <circle cx="40" cy="40" r="38" fill="none" stroke="#000" stroke-width="1.5"/>
+        <!-- Inner decorative ring -->
+        <circle cx="40" cy="40" r="33" fill="none" stroke="#000" stroke-width="0.5"/>
+        <!-- Flame / Torch top -->
+        <ellipse cx="40" cy="16" rx="5" ry="8" fill="#000"/>
+        <polygon points="40,8 37,18 43,18" fill="#000"/>
+        <!-- Torch stem -->
+        <rect x="38.5" y="22" width="3" height="14" fill="#000"/>
+        <!-- Book base -->
+        <rect x="26" y="36" width="28" height="18" rx="1" fill="none" stroke="#000" stroke-width="1.5"/>
+        <line x1="40" y1="36" x2="40" y2="54" stroke="#000" stroke-width="1"/>
+        <!-- Book spine curve -->
+        <path d="M40,36 Q38,45 40,54" fill="none" stroke="#000" stroke-width="0.7"/>
+        <!-- Lines on book pages -->
+        <line x1="30" y1="41" x2="38" y2="41" stroke="#000" stroke-width="0.8"/>
+        <line x1="30" y1="44" x2="38" y2="44" stroke="#000" stroke-width="0.8"/>
+        <line x1="30" y1="47" x2="38" y2="47" stroke="#000" stroke-width="0.8"/>
+        <line x1="42" y1="41" x2="50" y2="41" stroke="#000" stroke-width="0.8"/>
+        <line x1="42" y1="44" x2="50" y2="44" stroke="#000" stroke-width="0.8"/>
+        <line x1="42" y1="47" x2="50" y2="47" stroke="#000" stroke-width="0.8"/>
+        <!-- Text arc: UNIVERSITY OF DELHI -->
+        <path id="arcTop" d="M 12,40 A 28,28 0 0,1 68,40" fill="none"/>
+        <text font-size="5.5" font-family="Times New Roman,serif" fill="#000" font-weight="bold" letter-spacing="0.5">
+          <textPath href="#arcTop" startOffset="8%">UNIVERSITY OF DELHI</textPath>
+        </text>
+        <!-- Text arc bottom: EST 1922 -->
+        <path id="arcBot" d="M 16,52 A 28,28 0 0,0 64,52" fill="none"/>
+        <text font-size="5" font-family="Times New Roman,serif" fill="#000" letter-spacing="1">
+          <textPath href="#arcBot" startOffset="20%">EST. 1922</textPath>
+        </text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="resume-section-title">Educational Qualifications</div>
+  <table class="edu-table">
+    <tr><th>Course/Examination</th><th>Institution</th><th>Year of Passing</th><th>Performance</th></tr>
+    <tr><td>${e.course||'Bachelor of Management Studies'}</td><td>${e.institution||'Shaheed Sukhdev College of Business Studies (University of Delhi)'}</td><td>${e.semester||'Pursuing'}</td><td>${e.cgpa||'–'}</td></tr>
+    <tr><td>AISSCE (${e.xii_stream||'Commerce/Science/Humanities'})</td><td>${e.xii_school||'School Name (City)'}</td><td>${e.xii_year||'20XX'}</td><td>${e.xii_perf||'–'}</td></tr>
+    <tr><td>AISSE</td><td>${e.x_school||'School Name (City)'}</td><td>${e.x_year||'20XX'}</td><td>${e.x_perf||'–'}</td></tr>
+    ${(e.extras||[]).map(ex=>`<tr><td>${ex.qual||''}</td><td>${ex.org||''}</td><td>${ex.year||''}</td><td>${ex.perf||''}</td></tr>`).join('')}
+  </table>
+  <div class="skills-row"><strong>TECHNICAL SKILLS:</strong> ${e.skills||'Skill 1, Skill 2, Skill 3'}</div>`;
+
+  if(interns.length){
+    html+=`<div class="resume-section-title">Internships, Live Projects (and Startups)</div>`;
+    interns.forEach(i=>{
+      html+=`<div class="intern-heading"><span>${i.company||'Company'} – ${i.profile||'Profile'}</span><span class="intern-dur">[${i.duration||'X weeks, Month – Month 20XX'}]</span></div>
+      <ul class="intern-bullet">${i.desc1?`<li>${i.desc1}</li>`:''} ${i.desc2?`<li>${i.desc2}</li>`:''}</ul>`;
+    });
+  }
+
+  if(projs.length){
+    html+=`<div class="resume-section-title">Projects Undertaken (and Publications)</div><table class="proj-table">`;
+    projs.forEach(p=>{
+      html+=`<tr><td class="proj-left">${p.name||'Project'}<br><span style="font-size:8pt;font-weight:400">(${p.subject||'Subject'})</span></td>
+      <td class="proj-right"><strong>${p.highlight||'Highlight'}</strong><ul class="intern-bullet">${p.desc1?`<li>${p.desc1}</li>`:''} ${p.desc2?`<li>${p.desc2}</li>`:''}</ul></td></tr>`;
+    });
+    html+=`</table>`;
+  }
+
+  if(awards.length){
+    html+=`<div class="resume-section-title">Awards and Achievements</div><table class="award-table">`;
+    awards.forEach(a=>{
+      const lines=(a.awards||'').split('\n').filter(l=>l.trim());
+      html+=`<tr><td class="award-cat">${a.category||'Category'}</td><td class="award-content">${lines.map(l=>`<div style="margin-bottom:2px">${l}</div>`).join('')}</td></tr>`;
+    });
+    html+=`</table>`;
+  }
+
+  if(pors.length){
+    html+=`<div class="resume-section-title">Positions of Responsibility</div>`;
+    pors.forEach(p=>{
+      html+=`<div class="por-heading"><span>${p.position||'Position'} (${p.org||'Organisation – Institution'})</span><span>[${p.duration||'Month YYYY – Present'}]</span></div>
+      <ul class="por-bullet">${p.desc1?`<li>${p.desc1}</li>`:''} ${p.desc2?`<li>${p.desc2}</li>`:''}</ul>`;
+    });
+  }
+
+  if(ints.length){
+    html+=`<div class="resume-section-title">Other Interests and Activities</div><table class="interest-table">`;
+    ints.forEach(i=>{
+      html+=`<tr><td class="interest-cat">${i.category||'Category'}</td><td class="interest-val">${i.detail||''}</td></tr>`;
+    });
+    html+=`</table>`;
+  }
+
+  html+=`<div class="resume-footer">Career Development Centre | Shaheed Sukhdev College of Business Studies | PSP Area – IV, Dr. K.N. Katju Marg, Sector 16, Rohini, Delhi – 110089</div>
+  </div></div>`;
+  return html;
+}
+
+// ---- ADMIN ----
+function renderAdminTable(){
+  const search=(document.getElementById('admin-search')||{}).value||'';
+  const approved=getApprovedEmails();
+  const users=getUsers();
+  let total=approved.length, complete=0, partial=0;
+  const tbody=document.getElementById('admin-tbody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  approved.filter(e=>e.toLowerCase().includes(search.toLowerCase())).forEach((email,i)=>{
+    const data=getResumeData(email)||{};
+    const name=(data.personal&&data.personal.name)||'–';
+    const course=(data.education&&data.education.course)||'–';
+    const sections=['personal','education','internships','projects','awards','por','interests'];
+    let filled=0;
+    if(data.personal&&data.personal.name) filled++;
+    if(data.education&&data.education.course) filled++;
+    if(data.internships&&data.internships.length) filled++;
+    if(data.projects&&data.projects.length) filled++;
+    if(data.awards&&data.awards.length) filled++;
+    if(data.por&&data.por.length) filled++;
+    if(data.interests&&data.interests.length) filled++;
+    const pct=Math.round(filled/7*100);
+    let status,statusClass;
+    if(pct===100){status='Complete';statusClass='done';complete++;}
+    else if(pct>0){status=pct+'% done';statusClass='partial';partial++;}
+    else{status='Not started';statusClass='pending';}
+    tbody.innerHTML+=`<tr>
+      <td>${i+1}</td><td>${name}</td><td style="font-size:12px">${email}</td><td>${course}</td>
+      <td><span class="status-pill ${statusClass}">${status}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${data.lastSaved||'–'}</td>
+      <td><button class="view-link" onclick="adminViewResume('${email}')">View Resume</button></td>
+    </tr>`;
+  });
+  document.getElementById('stat-total').textContent=total;
+  document.getElementById('stat-complete').textContent=complete;
+  document.getElementById('stat-partial').textContent=partial;
+}
+
+function adminViewResume(email){
+  const data=getResumeData(email)||{};
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html><head><title>Resume - ${email}</title>
+  <style>body{margin:0;background:#e8e8e8;font-family:'Calibri',sans-serif}
+  .resume-page{background:#fff;width:794px;margin:20px auto;padding:28px 32px;font-size:9pt;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.15);min-height:1123px}
+  ${document.querySelector('style').textContent}
+  </style></head><body>${buildResumeHTML(data)}</body></html>`);
+}
+
+function openUploadModal(){ document.getElementById('upload-modal').classList.add('open'); }
+function closeUploadModal(){ document.getElementById('upload-modal').classList.remove('open'); }
+
+function bulkUploadEmails(){
+  const raw=document.getElementById('email-bulk').value;
+  const emails=raw.split('\n').map(e=>e.trim().toLowerCase()).filter(e=>e.includes('@'));
+  const existing=getApprovedEmails();
+  const merged=[...new Set([...existing,...emails])];
+  store('approved_emails',merged);
+  closeUploadModal();
+  renderAdminTable();
+  alert(`✓ Added ${emails.length} email(s). Total approved: ${merged.length}`);
+}
+
+function exportAll(){
+  alert('In a full deployment, this would zip and download all student resumes as PDFs. For now, use "View Resume" to open individual resumes and print/save as PDF.');
+}
+
+// ---- INIT ----
+// Pre-load some demo approved emails
+if(!localStorage.getItem('approved_emails')){
+  store('approved_emails',['demo.student@sscbs.du.ac.in','test.24001@sscbs.du.ac.in','sample.24002@sscbs.du.ac.in']);
+}
+</script>
+</body>
+</html>
