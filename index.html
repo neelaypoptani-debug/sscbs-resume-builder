@@ -85,33 +85,58 @@ body{font-family:var(--font);color:var(--text);background:#f8f8f8;min-height:100
 
 /* ---- PREVIEW RESUME ---- */
 .preview-wrap{background:#e8e8e8;padding:24px;min-height:calc(100vh - 56px)}
-.resume-page{background:#fff;width:794px;margin:0 auto;padding:32px 36px 48px;font-family:'Calibri','Calibri Body',Calibri,sans-serif;font-size:9.5pt;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.15);min-height:1123px;line-height:1.35}
-.resume-header-row{display:flex;align-items:center;border-bottom:2.5px solid #000;padding-bottom:8px;margin-bottom:6px;gap:10px}
-.resume-name{font-size:20pt;font-weight:700;letter-spacing:.5px;line-height:1.1}
-.resume-info{font-size:8.5pt;margin-top:3px;color:#000}
-.resume-logo-box{width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #000;border-radius:50%;overflow:hidden}
-.resume-section-title{background:#000;color:#fff;font-size:9pt;font-weight:700;padding:2px 7px;margin:8px 0 3px;text-transform:uppercase;letter-spacing:.8px;display:block}
-.edu-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:2px}
-.edu-table th{background:#d9d9d9;padding:3px 6px;border:1px solid #000;font-weight:700;text-align:left;font-size:8.5pt}
-.edu-table td{padding:3px 6px;border:1px solid #000;font-size:8.5pt}
-.skills-row{font-size:9pt;padding:4px 0 0}
-.intern-heading{font-weight:700;font-size:9pt;display:flex;justify-content:space-between;align-items:baseline;margin-top:4px}
-.intern-dur{font-weight:700;font-size:9pt}
-.intern-bullet{margin-left:18px;font-size:9pt;list-style:disc;margin-top:1px;margin-bottom:4px}
-.intern-bullet li{margin-bottom:1px;padding-left:2px}
+/* Exact SSCBS format: A4 at 96dpi = 794px wide */
+.resume-page{background:#fff;width:794px;margin:0 auto;padding:28px 30px 50px;font-family:'Calibri','Calibri Body',Calibri,sans-serif;font-size:9pt;position:relative;box-shadow:0 4px 24px rgba(0,0,0,.15);min-height:1123px;line-height:1.3;color:#000}
+
+/* HEADER: blue box with white text, name large */
+.resume-header-box{background:#0070C0;color:#fff;padding:8px 12px 6px;display:flex;align-items:center;gap:10px;margin-bottom:0}
+.resume-name{font-size:18pt;font-weight:400;letter-spacing:.3px;line-height:1.15;color:#fff;flex:1}
+.resume-info{font-size:9pt;margin-top:2px;color:#fff;flex:1}
+.resume-info a{color:#fff;text-decoration:underline}
+.resume-logo-box{width:62px;height:62px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff;border-radius:50%;overflow:hidden;padding:2px}
+
+/* SECTION TITLES: solid black bar, white bold uppercase */
+.resume-section-title{background:#000;color:#fff;font-size:9pt;font-weight:700;padding:2px 6px;margin:7px 0 2px;text-transform:uppercase;letter-spacing:.5px;display:block;width:100%}
+
+/* EDUCATION TABLE: borders on all cells, header row grey */
+.edu-table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:0}
+.edu-table th{background:#C3C1C1;padding:3px 6px;border:1px solid #000;font-weight:700;text-align:left;font-size:8.5pt}
+.edu-table td{padding:3px 6px;border:1px solid #000;font-size:8.5pt;vertical-align:top}
+.skills-row{font-size:9pt;padding:3px 0 0}
+
+/* INTERNSHIPS: bold heading left, bold duration right */
+.intern-block{margin-bottom:3px}
+.intern-heading{font-weight:700;font-size:9pt;display:flex;justify-content:space-between;align-items:baseline;margin-top:5px}
+.intern-dur{font-weight:700;font-size:9pt;white-space:nowrap;margin-left:8px}
+.intern-bullet{margin-left:16px;font-size:9pt;list-style:disc;margin-top:0;margin-bottom:2px;padding-left:2px}
+.intern-bullet li{margin-bottom:1px}
+
+/* PROJECTS: left col grey bg, bold; right col normal */
 .proj-table{width:100%;border-collapse:collapse;margin-top:2px}
-.proj-left{width:150px;font-weight:700;font-size:9pt;padding:3px 8px 3px 0;vertical-align:top;border-right:1px solid #ccc}
-.proj-right{font-size:9pt;vertical-align:top;padding:3px 8px}
+.proj-left{width:155px;background:#C3C1C1;font-weight:700;font-size:9pt;padding:4px 8px;vertical-align:top;border:1px solid #000}
+.proj-right{font-size:9pt;vertical-align:top;padding:4px 8px;border:1px solid #000}
+
+/* AWARDS: left col grey bg bold category; right col award text bold, year bold right-aligned */
 .award-table{width:100%;border-collapse:collapse;margin-top:2px}
-.award-cat{font-weight:700;font-size:9pt;padding:2px 10px 4px 0;vertical-align:top;width:170px;border-right:1px solid #ccc}
-.award-content{font-size:9pt;vertical-align:top;padding:2px 0 4px 10px}
-.por-heading{font-weight:700;display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;margin-top:4px}
-.por-bullet{margin-left:18px;font-size:9pt;list-style:disc;margin-top:1px;margin-bottom:4px}
+.award-cat{background:#C3C1C1;font-weight:700;font-size:9pt;padding:4px 8px;vertical-align:top;width:160px;border:1px solid #000}
+.award-content{font-size:9pt;vertical-align:top;padding:4px 8px;border:1px solid #000}
+.award-line{display:flex;justify-content:space-between;margin-bottom:1px}
+.award-year{font-weight:700;white-space:nowrap;margin-left:8px}
+
+/* POSITIONS OF RESPONSIBILITY: bold heading + bold duration */
+.por-block{margin-bottom:3px}
+.por-heading{font-weight:700;display:flex;justify-content:space-between;align-items:baseline;font-size:9pt;margin-top:5px}
+.por-dur{font-weight:700;font-size:9pt;white-space:nowrap;margin-left:8px}
+.por-bullet{margin-left:16px;font-size:9pt;list-style:disc;margin-top:0;margin-bottom:2px;padding-left:2px}
+.por-bullet li{margin-bottom:1px}
+
+/* INTERESTS: left col grey bg bold category; right col normal */
 .interest-table{width:100%;border-collapse:collapse;margin-top:2px}
-.interest-cat{font-weight:700;font-size:9pt;padding:2px 10px 4px 0;width:150px;vertical-align:top;border-right:1px solid #ccc}
-.interest-val{font-size:9pt;vertical-align:top;padding:2px 0 4px 10px}
-.resume-footer{position:absolute;bottom:16px;left:36px;right:36px;border-top:1px solid #999;padding-top:4px;font-size:7pt;color:#555;text-align:center}
-.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:72pt;color:rgba(0,0,0,.04);font-weight:900;pointer-events:none;white-space:nowrap;z-index:0;letter-spacing:8px}
+.interest-cat{background:#C3C1C1;font-weight:700;font-size:9pt;padding:4px 8px;width:155px;vertical-align:top;border:1px solid #000}
+.interest-val{font-size:9pt;vertical-align:top;padding:4px 8px;border:1px solid #000}
+
+.resume-footer{position:absolute;bottom:14px;left:30px;right:30px;border-top:1px solid #aaa;padding-top:3px;font-size:7pt;color:#444;text-align:center}
+.watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:72pt;color:rgba(0,0,0,.035);font-weight:900;pointer-events:none;white-space:nowrap;z-index:0;letter-spacing:8px}
 .resume-content{position:relative;z-index:1}
 .dl-btn{display:block;width:fit-content;margin:0 auto 20px;background:var(--red);color:#fff;border:none;padding:11px 32px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font)}
 
@@ -442,14 +467,16 @@ function saveSection(sec){
   if(sec==='internships'){
     const items=[];
     document.querySelectorAll('.intern-item').forEach(row=>{
-      items.push({company:row.querySelector('.ii-company').value,profile:row.querySelector('.ii-profile').value,duration:row.querySelector('.ii-dur').value,desc1:row.querySelector('.ii-d1').value,desc2:row.querySelector('.ii-d2').value});
+      const bullets=[...row.querySelectorAll('.bullet-cont textarea')].map(t=>t.value.trim()).filter(Boolean);
+      items.push({company:row.querySelector('.ii-company').value,profile:row.querySelector('.ii-profile').value,duration:row.querySelector('.ii-dur').value,bullets});
     });
     data.internships=items;
   }
   if(sec==='projects'){
     const items=[];
     document.querySelectorAll('.proj-item').forEach(row=>{
-      items.push({name:row.querySelector('.pi-name').value,subject:row.querySelector('.pi-subject').value,highlight:row.querySelector('.pi-hl').value,desc1:row.querySelector('.pi-d1').value,desc2:row.querySelector('.pi-d2').value});
+      const bullets=[...row.querySelectorAll('.bullet-cont textarea')].map(t=>t.value.trim()).filter(Boolean);
+      items.push({name:row.querySelector('.pi-name').value,subject:row.querySelector('.pi-subject').value,highlight:row.querySelector('.pi-hl').value,bullets});
     });
     data.projects=items;
   }
@@ -463,7 +490,8 @@ function saveSection(sec){
   if(sec==='por'){
     const items=[];
     document.querySelectorAll('.por-item').forEach(row=>{
-      items.push({position:row.querySelector('.pi2-pos').value,org:row.querySelector('.pi2-org').value,duration:row.querySelector('.pi2-dur').value,desc1:row.querySelector('.pi2-d1').value,desc2:row.querySelector('.pi2-d2').value});
+      const bullets=[...row.querySelectorAll('.bullet-cont textarea')].map(t=>t.value.trim()).filter(Boolean);
+      items.push({position:row.querySelector('.pi2-pos').value,org:row.querySelector('.pi2-org').value,duration:row.querySelector('.pi2-dur').value,bullets});
     });
     data.por=items;
   }
@@ -618,6 +646,16 @@ function renderInternships(){
   ${saveRow('internships')}`;
 }
 
+// ---- SHARED BULLET FIELD HELPER ----
+function addBulletField(container, value){
+  const wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;gap:6px;align-items:flex-start;margin-bottom:6px';
+  wrap.innerHTML=`<span style="margin-top:9px;color:#666;font-size:13px">•</span>
+  <textarea rows="2" placeholder="Description point (no full stop)" style="flex:1;border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;font-family:var(--font);resize:vertical">${value||''}</textarea>
+  <button onclick="this.parentElement.remove()" style="background:none;border:none;color:#c00;cursor:pointer;font-size:16px;margin-top:6px;padding:0 4px" title="Remove">✕</button>`;
+  container.appendChild(wrap);
+}
+
 let internCount=0;
 function addInternRow(data, num){
   internCount++;
@@ -629,10 +667,13 @@ function addInternRow(data, num){
   <div class="form-row"><div class="f-field"><label>Company Name</label><input class="ii-company" placeholder="ABC Consulting"></div>
   <div class="f-field"><label>Profile / Live Project Name</label><input class="ii-profile" placeholder="Business Analyst / Market Research"></div></div>
   <div class="form-row single"><div class="f-field"><label>Duration (e.g. 6 weeks, June – July 2024)</label><input class="ii-dur" placeholder="6 weeks, June – July 2024"></div></div>
-  <div class="form-row single"><div class="f-field"><label>Description Point 1 (no full stop)</label><textarea class="ii-d1" rows="2" placeholder="Analysed market trends across 3 sectors to identify growth opportunities worth ₹2Cr"></textarea></div></div>
-  <div class="form-row single"><div class="f-field"><label>Description Point 2 (no full stop)</label><textarea class="ii-d2" rows="2" placeholder="Developed Excel dashboard tracking 15 KPIs, reducing reporting time by 40%"></textarea></div></div>`;
+  <div class="f-field" style="margin-top:10px"><label>Description Points (no full stop — add as many as needed)</label><div class="bullet-cont"></div>
+  <button class="add-btn" style="margin-top:6px" onclick="addBulletField(this.previousElementSibling)">+ Add Point</button></div>`;
   cont.appendChild(div);
-  if(data){div.querySelector('.ii-company').value=data.company||'';div.querySelector('.ii-profile').value=data.profile||'';div.querySelector('.ii-dur').value=data.duration||'';div.querySelector('.ii-d1').value=data.desc1||'';div.querySelector('.ii-d2').value=data.desc2||'';}
+  const bc=div.querySelector('.bullet-cont');
+  const bullets=(data&&data.bullets&&data.bullets.length)?data.bullets:['',''];
+  bullets.forEach(b=>addBulletField(bc,b));
+  if(data){div.querySelector('.ii-company').value=data.company||'';div.querySelector('.ii-profile').value=data.profile||'';div.querySelector('.ii-dur').value=data.duration||'';}
 }
 
 function renderProjects(){
@@ -655,10 +696,13 @@ function addProjRow(data, num){
   <div class="form-row"><div class="f-field"><label>Project/Publication Name</label><input class="pi-name" placeholder="Market Volatility Analysis"></div>
   <div class="f-field"><label>Subject / Publisher</label><input class="pi-subject" placeholder="Financial Economics / Emerald Publishing"></div></div>
   <div class="form-row single"><div class="f-field"><label>Highlight / Sub-heading</label><input class="pi-hl" placeholder="Applied CAPM model across 50 NSE-listed stocks"></div></div>
-  <div class="form-row single"><div class="f-field"><label>Description Point 1</label><textarea class="pi-d1" rows="2" placeholder="Studied price movements of 50 blue-chip stocks over 5 years"></textarea></div></div>
-  <div class="form-row single"><div class="f-field"><label>Description Point 2</label><textarea class="pi-d2" rows="2" placeholder="Identified correlation between sectoral indices and market-wide returns"></textarea></div></div>`;
+  <div class="f-field" style="margin-top:10px"><label>Description Points (add as many as needed)</label><div class="bullet-cont"></div>
+  <button class="add-btn" style="margin-top:6px" onclick="addBulletField(this.previousElementSibling)">+ Add Point</button></div>`;
   cont.appendChild(div);
-  if(data){div.querySelector('.pi-name').value=data.name||'';div.querySelector('.pi-subject').value=data.subject||'';div.querySelector('.pi-hl').value=data.highlight||'';div.querySelector('.pi-d1').value=data.desc1||'';div.querySelector('.pi-d2').value=data.desc2||'';}
+  const bc=div.querySelector('.bullet-cont');
+  const bullets=(data&&data.bullets&&data.bullets.length)?data.bullets:['',''];
+  bullets.forEach(b=>addBulletField(bc,b));
+  if(data){div.querySelector('.pi-name').value=data.name||'';div.querySelector('.pi-subject').value=data.subject||'';div.querySelector('.pi-hl').value=data.highlight||'';}
 }
 
 function renderAwards(){
@@ -707,10 +751,13 @@ function addPORRow(data, num){
   <div class="form-row"><div class="f-field"><label>Position / Role</label><input class="pi2-pos" placeholder="President / Vice President"></div>
   <div class="f-field"><label>Organisation – Institution</label><input class="pi2-org" placeholder="Finance Society – SSCBS"></div></div>
   <div class="form-row single"><div class="f-field"><label>Duration (e.g. August 2024 – Present)</label><input class="pi2-dur" placeholder="August 2024 – Present"></div></div>
-  <div class="form-row single"><div class="f-field"><label>Role & Impact Point 1 (no full stop)</label><textarea class="pi2-d1" rows="2" placeholder="Led a team of 25 members across 5 committees to organise SSCBS Finance Conclave"></textarea></div></div>
-  <div class="form-row single"><div class="f-field"><label>Role & Impact Point 2 (no full stop)</label><textarea class="pi2-d2" rows="2" placeholder="Secured ₹3L in sponsorships from 8 industry partners for annual flagship event"></textarea></div></div>`;
+  <div class="f-field" style="margin-top:10px"><label>Role & Impact Points (no full stop — add as many as needed)</label><div class="bullet-cont"></div>
+  <button class="add-btn" style="margin-top:6px" onclick="addBulletField(this.previousElementSibling)">+ Add Point</button></div>`;
   cont.appendChild(div);
-  if(data){div.querySelector('.pi2-pos').value=data.position||'';div.querySelector('.pi2-org').value=data.org||'';div.querySelector('.pi2-dur').value=data.duration||'';div.querySelector('.pi2-d1').value=data.desc1||'';div.querySelector('.pi2-d2').value=data.desc2||'';}
+  const bc=div.querySelector('.bullet-cont');
+  const bullets=(data&&data.bullets&&data.bullets.length)?data.bullets:['',''];
+  bullets.forEach(b=>addBulletField(bc,b));
+  if(data){div.querySelector('.pi2-pos').value=data.position||'';div.querySelector('.pi2-org').value=data.org||'';div.querySelector('.pi2-dur').value=data.duration||'';}
 }
 
 function renderInterests(){
@@ -758,99 +805,139 @@ function buildResumeHTML(data){
   const pors=data.por||[];
   const ints=data.interests||[];
 
+  // SVG logo (University of Delhi style, B&W)
+  const logoSVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="56" height="56">
+    <circle cx="40" cy="40" r="37" fill="none" stroke="#000" stroke-width="1.5"/>
+    <circle cx="40" cy="40" r="32" fill="none" stroke="#000" stroke-width="0.5"/>
+    <ellipse cx="40" cy="17" rx="4.5" ry="7" fill="#000"/>
+    <polygon points="40,9 37,19 43,19" fill="#000"/>
+    <rect x="38.5" y="23" width="3" height="12" fill="#000"/>
+    <rect x="27" y="35" width="26" height="17" rx="1" fill="none" stroke="#000" stroke-width="1.4"/>
+    <line x1="40" y1="35" x2="40" y2="52" stroke="#000" stroke-width="0.9"/>
+    <line x1="30" y1="40" x2="38.5" y2="40" stroke="#000" stroke-width="0.7"/>
+    <line x1="30" y1="43" x2="38.5" y2="43" stroke="#000" stroke-width="0.7"/>
+    <line x1="30" y1="46" x2="38.5" y2="46" stroke="#000" stroke-width="0.7"/>
+    <line x1="41.5" y1="40" x2="50" y2="40" stroke="#000" stroke-width="0.7"/>
+    <line x1="41.5" y1="43" x2="50" y2="43" stroke="#000" stroke-width="0.7"/>
+    <line x1="41.5" y1="46" x2="50" y2="46" stroke="#000" stroke-width="0.7"/>
+    <path id="tA" d="M13,40 A27,27 0 0,1 67,40" fill="none"/>
+    <text font-size="5.2" font-family="Times New Roman,serif" fill="#000" font-weight="bold" letter-spacing="0.3"><textPath href="#tA" startOffset="7%">UNIVERSITY OF DELHI</textPath></text>
+    <path id="tB" d="M17,53 A27,27 0 0,0 63,53" fill="none"/>
+    <text font-size="5" font-family="Times New Roman,serif" fill="#000" letter-spacing="1.2"><textPath href="#tB" startOffset="18%">EST. 1922</textPath></text>
+  </svg>`;
+
   let html=`<div class="resume-page">
   <div class="watermark">SSCBS</div>
   <div class="resume-content">
-  <div class="resume-header-row">
+
+  <!-- HEADER: blue background, white text, logo right -->
+  <div class="resume-header-box">
     <div style="flex:1">
-      <div class="resume-name">${p.name||'YOUR FULL NAME'}</div>
-      <div class="resume-info">DOB: ${p.dob||'DD/MM/YYYY'} | ${p.email||'email@sscbs.du.ac.in'} | ${p.phone||'+91 99 999 99 999'} | <a href="${p.linkedin||'#'}" style="color:#000;text-decoration:underline">LinkedIn</a></div>
+      <div class="resume-name">${p.name||'FULL NAME'}</div>
+      <div class="resume-info">DOB: ${p.dob||'DD/MM/YYYY'} &nbsp;|&nbsp; E-mail: ${p.email||'name.24999@sscbs.du.ac.in'} &nbsp;|&nbsp; Phone: ${p.phone||'+91 99 999 99 999'} &nbsp;|&nbsp; <a href="${p.linkedin||'#'}" style="color:#fff;text-decoration:underline">LinkedIn</a></div>
     </div>
-    <div class="resume-logo-box">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="56" height="56">
-        <!-- Outer circle -->
-        <circle cx="40" cy="40" r="38" fill="none" stroke="#000" stroke-width="1.5"/>
-        <!-- Inner decorative ring -->
-        <circle cx="40" cy="40" r="33" fill="none" stroke="#000" stroke-width="0.5"/>
-        <!-- Flame / Torch top -->
-        <ellipse cx="40" cy="16" rx="5" ry="8" fill="#000"/>
-        <polygon points="40,8 37,18 43,18" fill="#000"/>
-        <!-- Torch stem -->
-        <rect x="38.5" y="22" width="3" height="14" fill="#000"/>
-        <!-- Book base -->
-        <rect x="26" y="36" width="28" height="18" rx="1" fill="none" stroke="#000" stroke-width="1.5"/>
-        <line x1="40" y1="36" x2="40" y2="54" stroke="#000" stroke-width="1"/>
-        <!-- Book spine curve -->
-        <path d="M40,36 Q38,45 40,54" fill="none" stroke="#000" stroke-width="0.7"/>
-        <!-- Lines on book pages -->
-        <line x1="30" y1="41" x2="38" y2="41" stroke="#000" stroke-width="0.8"/>
-        <line x1="30" y1="44" x2="38" y2="44" stroke="#000" stroke-width="0.8"/>
-        <line x1="30" y1="47" x2="38" y2="47" stroke="#000" stroke-width="0.8"/>
-        <line x1="42" y1="41" x2="50" y2="41" stroke="#000" stroke-width="0.8"/>
-        <line x1="42" y1="44" x2="50" y2="44" stroke="#000" stroke-width="0.8"/>
-        <line x1="42" y1="47" x2="50" y2="47" stroke="#000" stroke-width="0.8"/>
-        <!-- Text arc: UNIVERSITY OF DELHI -->
-        <path id="arcTop" d="M 12,40 A 28,28 0 0,1 68,40" fill="none"/>
-        <text font-size="5.5" font-family="Times New Roman,serif" fill="#000" font-weight="bold" letter-spacing="0.5">
-          <textPath href="#arcTop" startOffset="8%">UNIVERSITY OF DELHI</textPath>
-        </text>
-        <!-- Text arc bottom: EST 1922 -->
-        <path id="arcBot" d="M 16,52 A 28,28 0 0,0 64,52" fill="none"/>
-        <text font-size="5" font-family="Times New Roman,serif" fill="#000" letter-spacing="1">
-          <textPath href="#arcBot" startOffset="20%">EST. 1922</textPath>
-        </text>
-      </svg>
-    </div>
+    <div class="resume-logo-box">${logoSVG}</div>
   </div>
 
+  <!-- EDUCATION -->
   <div class="resume-section-title">Educational Qualifications</div>
   <table class="edu-table">
-    <tr><th>Course/Examination</th><th>Institution</th><th>Year of Passing</th><th>Performance</th></tr>
-    <tr><td>${e.course||'Bachelor of Management Studies'}</td><td>${e.institution||'Shaheed Sukhdev College of Business Studies (University of Delhi)'}</td><td>${e.semester||'Pursuing'}</td><td>${e.cgpa||'–'}</td></tr>
-    <tr><td>AISSCE (${e.xii_stream||'Commerce/Science/Humanities'})</td><td>${e.xii_school||'School Name (City)'}</td><td>${e.xii_year||'20XX'}</td><td>${e.xii_perf||'–'}</td></tr>
-    <tr><td>AISSE</td><td>${e.x_school||'School Name (City)'}</td><td>${e.x_year||'20XX'}</td><td>${e.x_perf||'–'}</td></tr>
+    <tr>
+      <th>Course/Examination</th>
+      <th>Institution</th>
+      <th>Year of Passing</th>
+      <th>Performance</th>
+    </tr>
+    <tr>
+      <td>${e.course||'Bachelor of Management Studies'}</td>
+      <td>${e.institution||'Shaheed Sukhdev College of Business Studies (University of Delhi)'}</td>
+      <td>${e.semester||'Pursuing'}</td>
+      <td>${e.cgpa||'–'}</td>
+    </tr>
+    <tr>
+      <td>AISSCE (${e.xii_stream||'Commerce/Science/Humanities'})</td>
+      <td>${e.xii_school||'School Name (City)'}</td>
+      <td>${e.xii_year||'20XX'}</td>
+      <td>${e.xii_perf||'–'}</td>
+    </tr>
+    <tr>
+      <td>AISSE</td>
+      <td>${e.x_school||'School Name (City)'}</td>
+      <td>${e.x_year||'20XX'}</td>
+      <td>${e.x_perf||'–'}</td>
+    </tr>
     ${(e.extras||[]).map(ex=>`<tr><td>${ex.qual||''}</td><td>${ex.org||''}</td><td>${ex.year||''}</td><td>${ex.perf||''}</td></tr>`).join('')}
   </table>
   <div class="skills-row"><strong>TECHNICAL SKILLS:</strong> ${e.skills||'Skill 1, Skill 2, Skill 3'}</div>`;
 
+  // INTERNSHIPS
   if(interns.length){
     html+=`<div class="resume-section-title">Internships, Live Projects (and Startups)</div>`;
     interns.forEach(i=>{
-      html+=`<div class="intern-heading"><span>${i.company||'Company'} – ${i.profile||'Profile'}</span><span class="intern-dur">[${i.duration||'X weeks, Month – Month 20XX'}]</span></div>
-      <ul class="intern-bullet">${i.desc1?`<li>${i.desc1}</li>`:''} ${i.desc2?`<li>${i.desc2}</li>`:''}</ul>`;
+      const bullets=(i.bullets||[]).filter(b=>b.trim());
+      html+=`<div class="intern-block">
+        <div class="intern-heading">
+          <span><strong>${i.company||'Company Name'} – ${i.profile||'Profile Name/Live Project'}</strong></span>
+          <span class="intern-dur">[${i.duration||'X weeks, Month – Month 20XX'}]</span>
+        </div>
+        <ul class="intern-bullet">${bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      </div>`;
     });
   }
 
+  // PROJECTS
   if(projs.length){
     html+=`<div class="resume-section-title">Projects Undertaken (and Publications)</div><table class="proj-table">`;
-    projs.forEach(p=>{
-      html+=`<tr><td class="proj-left">${p.name||'Project'}<br><span style="font-size:8pt;font-weight:400">(${p.subject||'Subject'})</span></td>
-      <td class="proj-right"><strong>${p.highlight||'Highlight'}</strong><ul class="intern-bullet">${p.desc1?`<li>${p.desc1}</li>`:''} ${p.desc2?`<li>${p.desc2}</li>`:''}</ul></td></tr>`;
+    projs.forEach(proj=>{
+      const bullets=(proj.bullets||[]).filter(b=>b.trim());
+      html+=`<tr>
+        <td class="proj-left"><strong>${proj.name||'Project Name'}</strong><br><span style="font-weight:400;font-size:8.5pt">(${proj.subject||'Subject'})</span></td>
+        <td class="proj-right"><strong>${proj.highlight||'Highlight of the Project'}</strong>
+          <ul class="intern-bullet">${bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+        </td>
+      </tr>`;
     });
     html+=`</table>`;
   }
 
+  // AWARDS
   if(awards.length){
     html+=`<div class="resume-section-title">Awards and Achievements</div><table class="award-table">`;
     awards.forEach(a=>{
       const lines=(a.awards||'').split('\n').filter(l=>l.trim());
-      html+=`<tr><td class="award-cat">${a.category||'Category'}</td><td class="award-content">${lines.map(l=>`<div style="margin-bottom:2px">${l}</div>`).join('')}</td></tr>`;
+      html+=`<tr>
+        <td class="award-cat"><strong>${a.category||'Category Name'}</strong></td>
+        <td class="award-content">${lines.map(l=>{
+          // Try to detect and bold [year] at end
+          const m=l.match(/^(.*?)(\[[\d\s,–\-]+\])\s*$/);
+          if(m) return `<div class="award-line"><span><strong>${m[1].trim()}</strong></span><span class="award-year">${m[2]}</span></div>`;
+          return `<div class="award-line"><span><strong>${l}</strong></span></div>`;
+        }).join('')}</td>
+      </tr>`;
     });
     html+=`</table>`;
   }
 
+  // POSITIONS OF RESPONSIBILITY
   if(pors.length){
     html+=`<div class="resume-section-title">Positions of Responsibility</div>`;
-    pors.forEach(p=>{
-      html+=`<div class="por-heading"><span>${p.position||'Position'} (${p.org||'Organisation – Institution'})</span><span>[${p.duration||'Month YYYY – Present'}]</span></div>
-      <ul class="por-bullet">${p.desc1?`<li>${p.desc1}</li>`:''} ${p.desc2?`<li>${p.desc2}</li>`:''}</ul>`;
+    pors.forEach(pr=>{
+      const bullets=(pr.bullets||[]).filter(b=>b.trim());
+      html+=`<div class="por-block">
+        <div class="por-heading">
+          <span><strong>${pr.position||'Position'} (${pr.org||'Organisation/Society – Institution'})</strong></span>
+          <span class="por-dur">[${pr.duration||'Month YYYY – Present'}]</span>
+        </div>
+        <ul class="por-bullet">${bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+      </div>`;
     });
   }
 
+  // INTERESTS
   if(ints.length){
     html+=`<div class="resume-section-title">Other Interests and Activities</div><table class="interest-table">`;
     ints.forEach(i=>{
-      html+=`<tr><td class="interest-cat">${i.category||'Category'}</td><td class="interest-val">${i.detail||''}</td></tr>`;
+      html+=`<tr><td class="interest-cat"><strong>${i.category||'Category Name'}</strong></td><td class="interest-val">${i.detail||''}</td></tr>`;
     });
     html+=`</table>`;
   }
